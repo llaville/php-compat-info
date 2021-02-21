@@ -37,8 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void
 
     $parameters = $containerConfigurator->parameters();
 
-    #$parameters->set('app.log_stream_path', sprintf('/tmp/compatinfo-%s.log', date('YmdHi')));
-    $parameters->set('app.log_stream_path', sprintf('/var/log/php/compatinfo-%s.log', date('YmdHi')));
+    $parameters->set('app.log_stream_path', sprintf('/tmp/compatinfo-%s.log', date('YmdHi')));
     $parameters->set('app.log_channel', 'App');
     $parameters->set('app.log_level', LogLevel::DEBUG);
 
