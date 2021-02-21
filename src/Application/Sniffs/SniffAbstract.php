@@ -14,8 +14,12 @@ namespace Bartlett\CompatInfo\Application\Sniffs;
 use Bartlett\CompatInfo\Application\Analyser\SniffVisitorInterface;
 use Bartlett\CompatInfo\Application\DataCollector\VersionUpdater;
 
+use Bartlett\CompatInfo\Application\Event\SniffEvent;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use function get_class;
 
 /**
  * @since Release 5.4.0
@@ -40,7 +44,15 @@ abstract class SniffAbstract extends NodeVisitorAbstract implements SniffInterfa
     /** @var string */
     protected $attributeKeyStore;
 
+    /** @var EventDispatcherInterface */
+    protected $dispatcher;
+
     use VersionUpdater;
+
+    public function __construct(EventDispatcherInterface $compatibilityEventDispatcher)
+    {
+        $this->dispatcher = $compatibilityEventDispatcher;
+    }
 
     // NodeVisitorAbstract inheritance
     // public function beforeTraverse(array $nodes)    { }
@@ -50,6 +62,13 @@ abstract class SniffAbstract extends NodeVisitorAbstract implements SniffInterfa
      */
     public function enterNode(Node $node)
     {
+        $this->dispatcher->dispatch(
+            new SniffEvent(
+                $this,
+                ['method' => __FUNCTION__, 'sniff' => get_class($this), 'node' => $node]
+            )
+        );
+
         if (!empty($this->contextCallback) && is_callable($this->contextCallback)) {
             call_user_func($this->contextCallback, $node);
         }
@@ -67,6 +86,7 @@ abstract class SniffAbstract extends NodeVisitorAbstract implements SniffInterfa
      */
     public function setUpBeforeSniff(): void
     {
+        $this->dispatcher->dispatch(new SniffEvent($this, ['method' => __FUNCTION__, 'sniff' => get_class($this)]));
     }
 
     /**
@@ -74,6 +94,7 @@ abstract class SniffAbstract extends NodeVisitorAbstract implements SniffInterfa
      */
     public function enterSniff(): void
     {
+        $this->dispatcher->dispatch(new SniffEvent($this, ['method' => __FUNCTION__, 'sniff' => get_class($this)]));
     }
 
     /**
@@ -81,6 +102,7 @@ abstract class SniffAbstract extends NodeVisitorAbstract implements SniffInterfa
      */
     public function leaveSniff(): void
     {
+        $this->dispatcher->dispatch(new SniffEvent($this, ['method' => __FUNCTION__, 'sniff' => get_class($this)]));
     }
 
     /**
@@ -88,6 +110,7 @@ abstract class SniffAbstract extends NodeVisitorAbstract implements SniffInterfa
      */
     public function tearDownAfterSniff(): void
     {
+        $this->dispatcher->dispatch(new SniffEvent($this, ['method' => __FUNCTION__, 'sniff' => get_class($this)]));
     }
 
     /**

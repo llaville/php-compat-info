@@ -11,23 +11,19 @@ namespace Bartlett\CompatInfo\Tests;
 use Bartlett\CompatInfo\Application\Analyser\CompatibilityAnalyser;
 use Bartlett\CompatInfo\Application\Query\Analyser\Compatibility\GetCompatibilityQuery;
 use Bartlett\CompatInfo\Application\Query\QueryBusInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Exception;
 use function reset;
 
 /**
- * @since Release 5.4.0
+ * @since Release 5.4.0, 6.0.0
  */
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected static $fixtures;
     protected static $analyserId;
-    protected static $queryBus;
-    protected static $sniffs;
-    protected static $container;
 
     /**
      * Sets up the shared fixture.
@@ -42,11 +38,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         ;
 
         self::$analyserId = CompatibilityAnalyser::class;
-
-        /** @var ContainerBuilder $container */
-        self::$container = require dirname(__DIR__) . '/config/container.php';
-
-        self::$queryBus = self::$container->get(QueryBusInterface::class);
     }
 
     /**
@@ -54,17 +45,18 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @param string $dataSource
      * @return array
+     * @throws Exception
      */
     protected function executeAnalysis(string $dataSource): array
     {
         $compatibilityQuery = new GetCompatibilityQuery(self::$fixtures . $dataSource, false);
 
-        try {
-            $profile = self::$queryBus->query($compatibilityQuery);
-            $data = $profile->getData();
-            return reset($data);
-        } catch (HandlerFailedException $e) {
-            return [];
-        }
+        /** @var ContainerBuilder $container */
+        $container = require dirname(__DIR__) . '/config/container.php';
+        $queryBus = $container->get(QueryBusInterface::class);
+
+        $profile = $queryBus->query($compatibilityQuery);
+        $data = $profile->getData();
+        return reset($data);
     }
 }

@@ -23,6 +23,7 @@ use Bartlett\CompatInfo\Application\Profiler\CollectorInterface;
 
 use PhpParser\Node;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\SplFileInfo;
 
 use function array_pop;
@@ -66,7 +67,8 @@ final class CompatibilityAnalyser extends AbstractSniffAnalyser
     public function __construct(
         CollectorInterface $profiler,
         SniffCollection $sniffCollection,
-        ReferenceCollectionInterface $referenceCollection
+        ReferenceCollectionInterface $referenceCollection,
+        EventDispatcherInterface $compatibilityEventDispatcher
     ) {
         $this->references = $referenceCollection;
 
@@ -89,7 +91,7 @@ final class CompatibilityAnalyser extends AbstractSniffAnalyser
             (new VersionDataCollector($keysAllowed))->setName(self::COLLECTOR_NAME)
         );
 
-        parent::__construct($sniffCollection, self::PARENT_NODE_ATTRIBUTE, self::ANALYSER_NODE_ATTRIBUTE);
+        parent::__construct($compatibilityEventDispatcher, $sniffCollection, self::PARENT_NODE_ATTRIBUTE, self::ANALYSER_NODE_ATTRIBUTE);
     }
 
     public function getProfiler(): CollectorInterface

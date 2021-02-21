@@ -20,6 +20,7 @@ use Bartlett\CompatInfo\Application\Sniffs\SniffAbstract;
 
 use PhpParser\Node;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use function ltrim;
 
 /**
@@ -36,8 +37,11 @@ final class ConditionalCodeSniff extends SniffAbstract
     /** @var ReferenceCollectionInterface */
     private $references;
 
-    public function __construct(ReferenceCollectionInterface $referenceCollection)
-    {
+    public function __construct(
+        EventDispatcherInterface $compatibilityEventDispatcher,
+        ReferenceCollectionInterface $referenceCollection
+    ) {
+        parent::__construct($compatibilityEventDispatcher);
         $this->references = $referenceCollection;
     }
 
