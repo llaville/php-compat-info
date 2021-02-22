@@ -14,10 +14,10 @@ trait VersionUpdater
     protected static $php4 = [
         'ext.name' => 'user',
         'ext.min'  => '',
-        'ext.max'  => null,
+        'ext.max'  => '',
         'ext.all'  => '',
         'php.min'  => '4.0.0',
-        'php.max'  => null,
+        'php.max'  => '',
         'php.all'  => '',
         'matches'  => 0,
         'declared' => false,

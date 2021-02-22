@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Unit tests for PHP_CompatInfo package, keyword reserved sniff
  *
@@ -14,6 +15,8 @@
 
 namespace Bartlett\CompatInfo\Tests\Sniffs;
 
+use Exception;
+
 /**
  * Keywords reserved.
  *
@@ -22,7 +25,7 @@ namespace Bartlett\CompatInfo\Tests\Sniffs;
  * @link https://wiki.php.net/rfc/reserve_more_types_in_php_7
  * @link https://wiki.php.net/rfc/reserve_even_more_types_in_php_7
  *
- * @since Class available since Release 5.4.0
+ * @since Release 5.4.0
  *
  * @link https://github.com/llaville/php-compat-info/issues/186
  */
@@ -48,11 +51,12 @@ final class KeywordReservedSniffTest extends SniffTestCase
      * @param string $dataSource
      * @param array $expectedVersions
      * @return void
+     * @throws Exception
      */
     public function testForbiddenNamesInClassInterfaceTraitNamespace(string $dataSource, array $expectedVersions): void
     {
-        $metrics    = $this->executeAnalysis($dataSource);
-        $versions   = $metrics[self::$analyserId]['versions'];
+        $metrics  = $this->executeAnalysis($dataSource);
+        $versions = $metrics[self::$analyserId]['versions'];
 
         foreach ($expectedVersions as $key => $value) {
             $this->assertEquals($value, $versions[$key]);
