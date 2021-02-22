@@ -1,0 +1,76 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - 6.0
+    pull_request:
+
+jobs:
+    build_project:
+        runs-on: ${{ matrix.os }}
+
+        strategy:
+            fail-fast: false
+
+            matrix:
+                os:
+                    - ubuntu-18.04
+                php:
+                    - 7.2
+                    - 7.3
+                    - 7.4
+                    - 8.0
+                include:
+                    -   os: ubuntu-18.04
+                        php: 7.2
+                        extensions: json,pcre,pdo,phar,spl,mbstring,sqlite
+                        tools: phpstan
+                    -   os: ubuntu-18.04
+                        php: 7.3
+                        extensions: json,pcre,pdo,phar,spl,mbstring,sqlite
+                        tools: phpstan
+                    -   os: ubuntu-18.04
+                        php: 7.4
+                        extensions: json,pcre,pdo,phar,spl,mbstring,sqlite
+                        tools: phpstan
+                    -   os: ubuntu-18.04
+                        php: 8.0
+                        extensions: json,pcre,pdo,phar,spl,mbstring,sqlite
+                        tools: phpstan
+
+        name: "CompatInfo on ${{ matrix.os }} with PHP ${{ matrix.php }}"
+
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v2
+
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: ${{ matrix.extensions }}
+                    tools: ${{ matrix.tools }}
+
+            -
+                name: Install Composer dependencies
+                uses: "ramsey/composer-install@v1"
+                with:
+                    dependency-versions: "highest"
+                    composer-options: "--prefer-dist"
+
+            -
+                name: Build Database
+                run: |
+                    vendor/bin/doctrine orm:schema-tool:create
+                    vendor/bartlett/php-compatinfo-db/bin/compatinfo-db db:init
+
+            -
+                name: Static Analysis
+                run: phpstan analyse
+
+            -
+                name: Unit tests
+                run: vendor/bin/simple-phpunit
