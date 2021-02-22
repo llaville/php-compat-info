@@ -59,7 +59,7 @@ final class NodeDumper extends \PhpParser\NodeDumper
     }
 
     /**
-     * @param $node
+     * @param array|Node|Comment $node Node or array to dump
      * @return string
      */
     protected function dumpRecursiveAttributes($node): string
