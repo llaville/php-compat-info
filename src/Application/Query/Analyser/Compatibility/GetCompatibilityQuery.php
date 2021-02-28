@@ -9,7 +9,9 @@ use Bartlett\CompatInfo\Application\Query\QueryInterface;
  */
 final class GetCompatibilityQuery implements QueryInterface
 {
+    /** @var string  */
     private $source;
+    /** @var bool  */
     private $stopOnFailure;
 
     public function __construct(string $source, bool $stopOnFailure)

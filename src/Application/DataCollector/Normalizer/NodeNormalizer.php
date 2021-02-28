@@ -22,9 +22,12 @@ final class NodeNormalizer implements NormalizerInterface
 
     /**
      * {@inheritDoc}
+     * @param array<string, string> $context
+     * @return null|array<string, mixed>
      */
-    public function normalize($node, $format = null, array $context = [])
+    public function normalize($object, $format = null, array $context = [])
     {
+        $node = $object;
         $this->attributeNamespacedName = $context['nodeAttributeNamespacedName'] ?? 'bartlett.name';
 
         if (!$this->supportsNormalization($node, $format)) {

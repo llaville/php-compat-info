@@ -10,13 +10,20 @@ use IteratorAggregate;
 use Traversable;
 
 /**
+ * @phpstan-template T of \Bartlett\CompatInfo\Application\Sniffs\SniffInterface
+ * @phpstan-implements IteratorAggregate<T>
  * @since Release 5.4.0
  */
 class SniffCollection implements IteratorAggregate
 {
-    /** @var Traversable */
+    /** @var Traversable<T> */
     protected $sniffs;
 
+    /**
+     * SniffCollection constructor.
+     *
+     * @param iterable<T> $sniffs
+     */
     public function __construct(iterable $sniffs)
     {
         $this->sniffs = $sniffs;

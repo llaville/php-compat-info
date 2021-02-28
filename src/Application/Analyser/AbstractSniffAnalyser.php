@@ -12,8 +12,10 @@
 namespace Bartlett\CompatInfo\Application\Analyser;
 
 use Bartlett\CompatInfo\Application\Collection\SniffCollection;
-
+use Bartlett\CompatInfo\Application\DataCollector\ErrorHandler;
 use Bartlett\CompatInfo\Application\Event\BuildEvent;
+use Bartlett\CompatInfo\Application\Profiler\ProfilerInterface;
+use Bartlett\CompatInfo\Application\Sniffs\SniffInterface;
 
 use PhpParser\Node;
 
@@ -24,21 +26,56 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 abstract class AbstractSniffAnalyser implements SniffAnalyserInterface
 {
+    /** @var EventDispatcherInterface  */
     private $dispatcher;
+    /** @var SniffCollection<SniffInterface>  */
     private $sniffs;
+    /** @var string  */
     private $attributeParentKey;
+    /** @var string  */
     private $attributeKey;
 
+    /** @var ProfilerInterface  */
+    protected $profiler;
+
+    /**
+     * @param ProfilerInterface $profiler
+     * @param EventDispatcherInterface $dispatcher
+     * @param SniffCollection<SniffInterface> $sniffs
+     * @param string $attributeParentKey
+     * @param string $attributeKey
+     */
     public function __construct(
+        ProfilerInterface $profiler,
         EventDispatcherInterface $dispatcher,
         SniffCollection $sniffs,
         string $attributeParentKey,
         string $attributeKey
     ) {
+        $this->profiler = $profiler;
         $this->dispatcher = $dispatcher;
         $this->sniffs = $sniffs;
         $this->attributeParentKey = $attributeParentKey;
         $this->attributeKey = $attributeKey;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProfiler(): ProfilerInterface
+    {
+        return $this->profiler;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setErrorHandler(ErrorHandler $errorHandler): void
+    {
+        foreach ($this->profiler->getCollectors() as $collector) {
+            $collector->addFile($this->getCurrentFile());
+            $collector->addErrors($errorHandler->getErrors());
+        }
     }
 
     /**

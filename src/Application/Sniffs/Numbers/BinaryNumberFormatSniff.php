@@ -22,7 +22,7 @@ use function substr_compare;
  */
 final class BinaryNumberFormatSniff extends SniffAbstract
 {
-    /** @var array */
+    /** @var array<int, mixed> */
     private $tokens;
 
     /**

@@ -17,7 +17,7 @@ namespace Bartlett\CompatInfo\Application\Query\Diagnose;
 use Bartlett\CompatInfo\Application\Query\QueryHandlerInterface;
 use Bartlett\CompatInfoDb\Application\Query\Diagnose\DiagnoseHandler as CompatInfoDbDiagnoseHandler;
 use Bartlett\CompatInfoDb\Application\Query\Diagnose\DiagnoseQuery as CompatInfoDbDiagnoseQuery;
-use Bartlett\CompatInfoDb\Infrastructure\ProjectRequirements;
+use Bartlett\CompatInfoDb\Infrastructure\RequirementsInterface;
 
 /**
  * @since Release 6.0.0
@@ -32,7 +32,7 @@ final class DiagnoseHandler implements QueryHandlerInterface
         $this->innerHandler = $handler;
     }
 
-    public function __invoke(DiagnoseQuery $query): ProjectRequirements
+    public function __invoke(DiagnoseQuery $query): RequirementsInterface
     {
         $handler = $this->innerHandler;
         return $handler(new CompatInfoDbDiagnoseQuery($query->getDatabaseConnection()));

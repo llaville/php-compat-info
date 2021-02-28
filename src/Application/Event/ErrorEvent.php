@@ -19,5 +19,4 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  */
 final class ErrorEvent extends GenericEvent
 {
-
 }

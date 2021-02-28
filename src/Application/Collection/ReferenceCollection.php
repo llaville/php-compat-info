@@ -24,12 +24,16 @@ use function in_array;
 use function strpos;
 
 /**
+ * @phpstan-extends AbstractLazyCollection<string, array>
  * @since Release 4.0.0-alpha3
  */
 final class ReferenceCollection extends AbstractLazyCollection implements ReferenceCollectionInterface
 {
+    /** @var ClassRepository  */
     private $classRepository;
+    /** @var ConstantRepository  */
     private $constantRepository;
+    /** @var FunctionRepository  */
     private $functionRepository;
 
     /**

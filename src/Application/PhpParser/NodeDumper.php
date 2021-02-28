@@ -19,9 +19,13 @@ use PhpParser\Node\Stmt\UseUse;
  */
 final class NodeDumper extends \PhpParser\NodeDumper
 {
+    /** @var bool  */
     private $dumpAttributes;
+    /** @var bool */
     private $dumpComments;
+    /** @var bool */
     private $dumpPositions;
+    /** @var string|null */
     private $code;
 
     /**
@@ -30,7 +34,7 @@ final class NodeDumper extends \PhpParser\NodeDumper
      * Additional supported options:
      *  * bool dumpAttributes: Whether attributes should be dumped.
      *
-     * @param array $options Options (see description)
+     * @param array<string, bool> $options Options (see description)
      */
     public function __construct(array $options = [])
     {
@@ -39,7 +43,9 @@ final class NodeDumper extends \PhpParser\NodeDumper
     }
 
     /**
-     * {@inheritDoc}
+     * @param Node[]|Node $node
+     * @param string|null $code
+     * @return string
      */
     public function dump($node, string $code = null): string
     {
@@ -59,7 +65,7 @@ final class NodeDumper extends \PhpParser\NodeDumper
     }
 
     /**
-     * @param array|Node|Comment $node Node or array to dump
+     * @param Node[]|Node|Comment $node Node or array to dump
      * @return string
      */
     protected function dumpRecursiveAttributes($node): string
@@ -120,11 +126,11 @@ final class NodeDumper extends \PhpParser\NodeDumper
             foreach ($node as $key => $value) {
                 $r .= "\n    " . $key . ': ';
 
-                if (null === $value) {
+                if (null == $value) {
                     $r .= 'null';
-                } elseif (false === $value) {
+                } elseif (false == $value) {
                     $r .= 'false';
-                } elseif (true === $value) {
+                } elseif (true == $value) {
                     $r .= 'true';
                 } elseif (is_scalar($value)) {
                     $r .= $value;

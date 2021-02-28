@@ -2,6 +2,9 @@
 
 namespace Bartlett\CompatInfo\Application\Analyser;
 
+use Bartlett\CompatInfo\Application\DataCollector\ErrorHandler;
+use Bartlett\CompatInfo\Application\Profiler\ProfilerInterface;
+
 use PhpParser\NodeVisitor;
 
 /**
@@ -9,4 +12,7 @@ use PhpParser\NodeVisitor;
  */
 interface SniffAnalyserInterface extends SniffVisitorInterface, NodeVisitor
 {
+    public function getProfiler(): ProfilerInterface;
+
+    public function setErrorHandler(ErrorHandler $errorHandler): void;
 }

@@ -16,11 +16,11 @@ namespace Bartlett\CompatInfo\Application\Analyser;
 
 use Bartlett\CompatInfo\Application\Collection\ReferenceCollectionInterface;
 use Bartlett\CompatInfo\Application\Collection\SniffCollection;
-use Bartlett\CompatInfo\Application\DataCollector\ErrorHandler;
 use Bartlett\CompatInfo\Application\DataCollector\VersionDataCollector;
 use Bartlett\CompatInfo\Application\DataCollector\VersionUpdater;
-use Bartlett\CompatInfo\Application\Profiler\CollectorInterface;
+use Bartlett\CompatInfo\Application\Profiler\ProfilerInterface;
 
+use Bartlett\CompatInfo\Application\Sniffs\SniffInterface;
 use PhpParser\Node;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -47,12 +47,15 @@ final class CompatibilityAnalyser extends AbstractSniffAnalyser
     protected const NAMESPACED_NAME_NODE_ATTRIBUTE = 'bartlett.name';
     protected const COLLECTOR_NAME = self::class;
 
+    /** @var array<string, string> */
     private $aliases;
+    /** @var ReferenceCollectionInterface<array>  */
     private $references;
-    private $profiler;
+    /** @var SplFileInfo */
     private $currentFile;
+    /** @var array<int, array> */
     private $tokens;
-    private $metrics = [];
+    /** @var callable */
     private $contextCallback;
 
     use VersionUpdater;
@@ -60,12 +63,12 @@ final class CompatibilityAnalyser extends AbstractSniffAnalyser
     /**
      * Initializes the compatibility analyser
      *
-     * @param CollectorInterface $profiler
-     * @param SniffCollection $sniffCollection
-     * @param ReferenceCollectionInterface $referenceCollection
+     * @param ProfilerInterface $profiler
+     * @param SniffCollection<SniffInterface> $sniffCollection
+     * @param ReferenceCollectionInterface<array> $referenceCollection
      */
     public function __construct(
-        CollectorInterface $profiler,
+        ProfilerInterface $profiler,
         SniffCollection $sniffCollection,
         ReferenceCollectionInterface $referenceCollection,
         EventDispatcherInterface $compatibilityEventDispatcher
@@ -86,25 +89,11 @@ final class CompatibilityAnalyser extends AbstractSniffAnalyser
             'conditions',
         ];
 
-        $this->profiler = $profiler;
-        $this->profiler->addCollector(
+        $profiler->addCollector(
             (new VersionDataCollector($keysAllowed))->setName(self::COLLECTOR_NAME)
         );
 
-        parent::__construct($compatibilityEventDispatcher, $sniffCollection, self::PARENT_NODE_ATTRIBUTE, self::ANALYSER_NODE_ATTRIBUTE);
-    }
-
-    public function getProfiler(): CollectorInterface
-    {
-        return $this->profiler;
-    }
-
-    public function setErrorHandler(ErrorHandler $errorHandler): void
-    {
-        foreach ($this->profiler->getCollectors() as $collector) {
-            $collector->addFile($this->getCurrentFile());
-            $collector->addErrors($errorHandler->getErrors());
-        }
+        parent::__construct($profiler, $compatibilityEventDispatcher, $sniffCollection, self::PARENT_NODE_ATTRIBUTE, self::ANALYSER_NODE_ATTRIBUTE);
     }
 
     public function getCurrentFile(): SplFileInfo
@@ -125,11 +114,6 @@ final class CompatibilityAnalyser extends AbstractSniffAnalyser
     public function setCurrentFile(SplFileInfo $file): void
     {
         $this->currentFile = $file;
-    }
-
-    public function getMetrics(): array
-    {
-        return $this->metrics;
     }
 
     public function getName(): string
@@ -175,7 +159,7 @@ final class CompatibilityAnalyser extends AbstractSniffAnalyser
     /**
      * Compute final results, only when all data sources are parsed, analysed and versions data collected
      *
-     * @return array
+     * @return array<string, array>
      */
     public function getData(): array
     {

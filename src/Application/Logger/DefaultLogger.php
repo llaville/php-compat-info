@@ -37,7 +37,8 @@ use function strtr;
  */
 class DefaultLogger extends AbstractLogger
 {
-    private static $levels = array(
+    /** @var string[]  */
+    private static $levels = [
         100 => 'debug',
         200 => 'info',
         250 => 'notice',
@@ -46,12 +47,17 @@ class DefaultLogger extends AbstractLogger
         500 => 'critical',
         550 => 'alert',
         600 => 'emergency',
-    );
+    ];
 
+    /** @var string  */
     private $destination;
+    /** @var string  */
     private $channel;
+    /** @var string  */
     private $level;
+    /** @var DefaultLogger|object  */
     private $handler;
+    /** @var callable[]  */
     private $processors;
 
     /**
@@ -60,8 +66,8 @@ class DefaultLogger extends AbstractLogger
      * @param string $stream     The stream path
      * @param string $name       The logging channel
      * @param string $level      The minimum logging level
-     * @param mixed  $handler    Optional handler
-     * @param array  $processors Optional array of processors
+     * @param DefaultLogger|object $handler Optional handler
+     * @param callable[] $processors Optional array of processors
      */
     public function __construct(
         string $stream,
@@ -90,7 +96,7 @@ class DefaultLogger extends AbstractLogger
     /**
      * Checks whether the given record will be handled by this handler.
      *
-     * @param array $record The record to handle
+     * @param array<string, mixed> $record The record to handle
      *
      * @return bool
      */
@@ -105,7 +111,7 @@ class DefaultLogger extends AbstractLogger
      *
      * @param mixed  $level   The log level
      * @param string $message The log message
-     * @param array  $context The log context
+     * @param array[] $context The log context
      *
      * @return void
      */
@@ -131,7 +137,7 @@ class DefaultLogger extends AbstractLogger
     /**
      * Handles a record.
      *
-     * @param array $record The record to handle
+     * @param array<string, mixed> $record The record to handle
      *
      * @return void
      */
@@ -156,8 +162,8 @@ class DefaultLogger extends AbstractLogger
      *
      * This code was copied from Monolog\Processor\PsrLogMessageProcessor
      *
-     * @param array $record
-     * @return array
+     * @param array<string, mixed> $record
+     * @return array<string, mixed>
      * @author Jordi Boggiano <j.boggiano@seld.be>
      */
     public function interpolate(array $record): array

@@ -27,7 +27,10 @@ final class NameResolverVisitor extends NameResolver
     private $attributeNamespacedName;
 
     /**
-     * {@inheritDoc}
+     * NameResolverVisitor constructor.
+     *
+     * @param ErrorHandler|null $errorHandler
+     * @param array<string, string> $options
      */
     public function __construct(ErrorHandler $errorHandler = null, array $options = [])
     {

@@ -2,6 +2,9 @@
 
 namespace Bartlett\CompatInfo\Application\DataCollector;
 
+use PhpParser\Error;
+use PhpParser\Node;
+
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -17,15 +20,15 @@ interface DataCollectorInterface
     /**
      * Retrieves data collected.
      *
-     * @return array
+     * @return array[]
      */
     public function getData(): array;
 
     /**
      * Collects data for the given Node from AST.
      *
-     * @param array $nodes
-     * @return array
+     * @param Node[] $nodes
+     * @return array<mixed, mixed>
      */
     public function collect(array $nodes): array;
 
@@ -54,21 +57,21 @@ interface DataCollectorInterface
     /**
      * Returns list of files analysed.
      *
-     * @return array
+     * @return string[]
      */
     public function getFiles(): array;
 
     /**
      * Collects all errors found.
      *
-     * @param array $errors
+     * @param Error[] $errors
      */
     public function addErrors(array $errors): void;
 
     /**
      * Returns list of errors collected.
      *
-     * @return array
+     * @return string[]
      */
     public function getErrors(): array;
 }

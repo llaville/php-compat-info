@@ -38,6 +38,7 @@ final class LogEventSubscriber implements EventSubscriberInterface
 
     /**
      * {@inheritdoc}
+     * @return array<string, string>
      */
     public static function getSubscribedEvents()
     {
@@ -56,7 +57,7 @@ final class LogEventSubscriber implements EventSubscriberInterface
     /**
      * @param ConsoleCommandEvent $event
      */
-    public function onConsoleCommand(ConsoleCommandEvent $event)
+    public function onConsoleCommand(ConsoleCommandEvent $event): void
     {
         $context = ['command' => $event->getCommand()->getName()];
         $this->logger->info('Start {command} command.', $context);
@@ -65,40 +66,40 @@ final class LogEventSubscriber implements EventSubscriberInterface
     /**
      * @param ConsoleTerminateEvent $event
      */
-    public function onConsoleTerminate(ConsoleTerminateEvent $event)
+    public function onConsoleTerminate(ConsoleTerminateEvent $event): void
     {
         $context = ['command' => $event->getCommand()->getName()];
         $this->logger->info('Terminate {command} command.', $context);
     }
 
     /**
-     * @param ProgressEvent $event
+     * @param ProgressEvent<string, string> $event
      */
-    public function onProgress(ProgressEvent $event)
+    public function onProgress(ProgressEvent $event): void
     {
         $this->logger->notice('Start analysis of file "{file}"', $event->getArguments());
     }
 
     /**
-     * @param SuccessEvent $event
+     * @param SuccessEvent<string, string> $event
      */
-    public function onSuccess(SuccessEvent $event)
+    public function onSuccess(SuccessEvent $event): void
     {
         $this->logger->info('Analysis of file "{file}" successful.', $event->getArguments());
     }
 
     /**
-     * @param ErrorEvent $event
+     * @param ErrorEvent<string, string> $event
      */
-    public function onError(ErrorEvent $event)
+    public function onError(ErrorEvent $event): void
     {
         $this->logger->error('Analysis of file "{file}" failed: {error}', $event->getArguments());
     }
 
     /**
-     * @param CompleteEvent $event
+     * @param CompleteEvent<string, string> $event
      */
-    public function onComplete(CompleteEvent $event)
+    public function onComplete(CompleteEvent $event): void
     {
         $this->logger->notice(
             'Parsing the data source "{source}" is over with {successCount} files proceeded !', $event->getArguments()
@@ -106,9 +107,9 @@ final class LogEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param BuildEvent $event
+     * @param BuildEvent<string, string> $event
      */
-    public function onWalkAst(BuildEvent $event)
+    public function onWalkAst(BuildEvent $event): void
     {
         $context = $event->getArguments();
         $this->logger->debug(
@@ -121,9 +122,9 @@ final class LogEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param SniffEvent $event
+     * @param SniffEvent<string, string> $event
      */
-    public function onSniff(SniffEvent $event)
+    public function onSniff(SniffEvent $event): void
     {
         $context = $event->getArguments();
         $this->logger->debug(

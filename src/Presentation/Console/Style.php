@@ -33,11 +33,9 @@ final class Style extends SymfonyStyle implements StyleInterface
     }
 
     /**
-     * @param array $headers
-     * @param array $rows
-     * @param string $style default to 'compact' rather than 'symfony-style-guide'
+     * {@inheritDoc}
      */
-    public function table(array $headers, array $rows, string $style = 'compact')
+    public function table(array $headers, array $rows, string $style = 'compact'): void
     {
         $style = clone Table::getStyleDefinition($style);
         $style->setCellHeaderFormat('<info>%s</info>');

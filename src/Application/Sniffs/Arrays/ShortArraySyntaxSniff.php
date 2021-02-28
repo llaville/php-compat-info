@@ -19,6 +19,7 @@ use PhpParser\Node;
  */
 final class ShortArraySyntaxSniff extends SniffAbstract
 {
+    /** @var array<int, mixed> */
     private $tokens;
 
     /**

@@ -34,9 +34,15 @@ final class ConditionalCodeSniff extends SniffAbstract
     /** @var string */
     private $group;
 
-    /** @var ReferenceCollectionInterface */
+    /** @var ReferenceCollectionInterface<string, array> */
     private $references;
 
+    /**
+     * ConditionalCodeSniff constructor.
+     *
+     * @param EventDispatcherInterface $compatibilityEventDispatcher
+     * @param ReferenceCollectionInterface<string, array> $referenceCollection
+     */
     public function __construct(
         EventDispatcherInterface $compatibilityEventDispatcher,
         ReferenceCollectionInterface $referenceCollection

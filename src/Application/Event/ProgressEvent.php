@@ -14,12 +14,16 @@
 namespace Bartlett\CompatInfo\Application\Event;
 
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @since Release 6.0.0
  */
 final class ProgressEvent extends GenericEvent
 {
+    /**
+     * @return SplFileInfo[]
+     */
     public function getQueue(): iterable
     {
         return $this->hasArgument('queue') ? $this->getArgument('queue') : [];

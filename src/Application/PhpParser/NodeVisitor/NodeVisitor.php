@@ -2,7 +2,7 @@
 
 namespace Bartlett\CompatInfo\Application\PhpParser\NodeVisitor;
 
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @since Release 6.0.0
@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 interface NodeVisitor extends \PhpParser\NodeVisitor
 {
     /**
-     * @return Collection
+     * @return ArrayCollection<int, mixed>
      */
-    public function getCollection(): Collection;
+    public function getCollection(): ArrayCollection;
 }

@@ -20,7 +20,7 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 abstract class DataCollector implements DataCollectorInterface
 {
-    /** @var array */
+    /** @var array<string, array> */
     protected $data = [];
 
     /** @var string */

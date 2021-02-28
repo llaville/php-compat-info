@@ -17,6 +17,7 @@ final class Throwing implements ErrorHandler
 {
     /**
      * {@inheritDoc}
+     * @return void
      */
     public function handleError(Error $error)
     {

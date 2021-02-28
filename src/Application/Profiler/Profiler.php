@@ -6,13 +6,12 @@ use Bartlett\CompatInfo\Application\DataCollector\DataCollectorInterface;
 
 use Ramsey\Uuid\Uuid;
 
-use Exception;
 use function array_merge;
 
 /**
  * @since Release 5.4.0
  */
-final class Profiler implements CollectorInterface
+final class Profiler implements ProfilerInterface
 {
     use CollectorTrait;
 
@@ -29,7 +28,7 @@ final class Profiler implements CollectorInterface
     }
 
     /**
-     * Resets all Collectors to theirs initial state.
+     * {@inheritDoc}
      */
     public function reset(): void
     {
@@ -39,10 +38,7 @@ final class Profiler implements CollectorInterface
     }
 
     /**
-     * Collects all data from each Collector attached to this Profiler.
-     *
-     * @return Profile
-     * @throws Exception
+     * {@inheritDoc}
      */
     public function collect(): Profile
     {

@@ -13,12 +13,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PhpParser\Error;
 
 /**
+ * @phpstan-extends ArrayCollection<int, Error>
  * @since 5.4.0, 6.0.0
  */
 final class Collecting extends ArrayCollection implements ErrorHandler
 {
     /**
      * {@inheritDoc}
+     * @return void
      */
     public function handleError(Error $error)
     {

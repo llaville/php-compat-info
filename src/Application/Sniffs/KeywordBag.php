@@ -10,34 +10,53 @@ use function array_key_exists;
 use function array_merge;
 use function substr_count;
 
+/**
+ * @phpstan-implements IteratorAggregate<string, string>
+ */
 final class KeywordBag implements IteratorAggregate, Countable
 {
     /**
      * Keyword storage
-     * @var array
+     * @var string[]
      */
     private $keywords;
 
+    /**
+     * KeywordBag constructor.
+     * @param string[] $keywords
+     */
     public function __construct(array $keywords = [])
     {
         $this->keywords = $keywords;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getIterator()
     {
         return new ArrayIterator($this->keywords);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function count()
     {
         return count($this->keywords);
     }
 
+    /**
+     * @return string[]
+     */
     public function all(): array
     {
         return $this->keywords;
     }
 
+    /**
+     * @param string[] $keywords
+     */
     public function add(array $keywords = []): void
     {
         $this->keywords = array_merge($this->keywords, $keywords);
@@ -62,7 +81,7 @@ final class KeywordBag implements IteratorAggregate, Countable
         return array_key_exists($word, $this->keywords);
     }
 
-    public function get(string $word, string $default = '4.0.0')
+    public function get(string $word, string $default = '4.0.0'): string
     {
         if ($this->has($word)) {
             $version = $this->keywords[$word];

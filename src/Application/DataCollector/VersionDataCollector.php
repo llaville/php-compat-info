@@ -24,12 +24,13 @@ final class VersionDataCollector extends DataCollector
     /** @var string[] */
     private $dataKeysAllowed = [];
 
-    /** @var array */
-    private $extensions = [];
-
-    /** @var array */
+    /** @var array<string, mixed> */
     private $versions = [];
 
+    /**
+     * VersionDataCollector constructor.
+     * @param string[] $keysAllowed
+     */
     public function __construct(array $keysAllowed)
     {
         $visitor = new FilterVisitor(
@@ -83,7 +84,6 @@ final class VersionDataCollector extends DataCollector
         $this->versions = array_filter(self::$php4, function ($key) {
             return (strpos($key, 'php.') !== false);
         }, ARRAY_FILTER_USE_KEY);
-        $this->extensions = [];
         $this->data = array_fill_keys($this->dataKeysAllowed, []);
     }
 
@@ -142,66 +142,106 @@ final class VersionDataCollector extends DataCollector
         return $data;
     }
 
+    /**
+     * @return array[]
+     */
     public function getVersions(): array
     {
         return $this->data['versions'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getExtensions(): array
     {
         return $this->data['extensions'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getNamespaces(): array
     {
         return $this->data['namespaces'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getClasses(): array
     {
         return $this->data['classes'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getInterfaces(): array
     {
         return $this->data['interfaces'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getTraits(): array
     {
         return $this->data['traits'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getMethods(): array
     {
         return $this->data['methods'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getGenerators(): array
     {
         return $this->data['generators'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getFunctions(): array
     {
         return $this->data['functions'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getConstants(): array
     {
         return $this->data['constants'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getDirectives(): array
     {
         return $this->data['directives'] ?? [];
     }
 
+    /**
+     * @return array[]
+     */
     public function getConditions(): array
     {
         return $this->data['conditions'] ?? [];
     }
 
+    /**
+     * @param string $id
+     * @param array<string, mixed> $condition
+     */
     private function handleCodeWithCondition(string $id, array $condition): void
     {
         $name = $condition['opt.name'];

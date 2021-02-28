@@ -11,6 +11,7 @@ use function array_merge;
  */
 trait VersionUpdater
 {
+    /** @var array<string, mixed> */
     protected static $php4 = [
         'ext.name' => 'user',
         'ext.min'  => '',
@@ -42,8 +43,8 @@ trait VersionUpdater
     /**
      * Updates the version of a specific element.
      *
-     * @param array $target
-     * @param array $versions
+     * @param array<string, mixed> $target
+     * @param array<string, string> $versions
      * @return bool
      */
     protected function updateElementVersion(array &$target, array $versions): bool
@@ -76,7 +77,7 @@ trait VersionUpdater
      *
      * @param Node $node
      * @param string $attributeKey
-     * @param array $versions
+     * @param array<string, string> $versions
      */
     protected function updateNodeElementVersion(Node $node, string $attributeKey, array $versions): void
     {
@@ -89,8 +90,8 @@ trait VersionUpdater
      * Updates versions of an Extension.
      *
      * @param string $name
-     * @param array $target
-     * @param array $versions
+     * @param array<string, string> $target
+     * @param array<string, string> $versions
      * @return bool
      */
     protected function updateExtension(string $name, array &$target, array $versions): bool

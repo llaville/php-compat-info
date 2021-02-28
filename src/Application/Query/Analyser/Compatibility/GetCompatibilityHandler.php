@@ -17,6 +17,7 @@ namespace Bartlett\CompatInfo\Application\Query\Analyser\Compatibility;
 use Bartlett\CompatInfo\Application\DataCollector\ErrorHandler\Collecting;
 use Bartlett\CompatInfo\Application\DataCollector\ErrorHandler\Throwing;
 use Bartlett\CompatInfo\Application\PhpParser\Parser;
+use Bartlett\CompatInfo\Application\Profiler\Profile;
 use Bartlett\CompatInfo\Application\Query\QueryHandlerInterface;
 use Bartlett\CompatInfo\Application\Service\SourceProvider;
 
@@ -27,6 +28,7 @@ use RuntimeException;
  */
 final class GetCompatibilityHandler implements QueryHandlerInterface
 {
+    /** @var Parser  */
     private $parser;
 
     public function __construct(Parser $parser)
@@ -34,7 +36,7 @@ final class GetCompatibilityHandler implements QueryHandlerInterface
         $this->parser = $parser;
     }
 
-    public function __invoke(GetCompatibilityQuery $query)
+    public function __invoke(GetCompatibilityQuery $query): Profile
     {
         $dataSource = $query->getSource();
         $source = realpath($dataSource);

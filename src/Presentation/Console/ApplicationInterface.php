@@ -15,5 +15,9 @@ interface ApplicationInterface extends ContainerAwareInterface
     public const NAME = 'phpCompatInfo';
     public const VERSION = '6.0.x-dev';
 
+    /**
+     * @param CommandLoaderInterface $commandLoader
+     * @return void
+     */
     public function setCommandLoader(CommandLoaderInterface $commandLoader);
 }

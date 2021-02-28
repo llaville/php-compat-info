@@ -28,7 +28,7 @@ final class ParentContextVisitor extends NodeVisitorAbstract
      *  * nodeAttributeParentKeyStore (default "bartlett.parent"): An attribute will be added
      *    on each classes, interfaces, traits, functions, closures, arrow functions or properties to store the parent node.
      *
-     * @param array $options
+     * @param array<string, string> $options
      */
     public function __construct(array $options = [])
     {

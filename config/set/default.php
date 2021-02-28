@@ -4,8 +4,8 @@ use Bartlett\CompatInfo\Application\Collection\ReferenceCollection;
 use Bartlett\CompatInfo\Application\Collection\ReferenceCollectionInterface;
 use Bartlett\CompatInfo\Application\Collection\SniffCollection;
 use Bartlett\CompatInfo\Application\Logger\DefaultLogger;
-use Bartlett\CompatInfo\Application\Profiler\CollectorInterface;
 use Bartlett\CompatInfo\Application\Profiler\Profiler;
+use Bartlett\CompatInfo\Application\Profiler\ProfilerInterface;
 use Bartlett\CompatInfo\Application\Query\QueryBusInterface;
 use Bartlett\CompatInfo\Application\Query\QueryHandlerInterface;
 use Bartlett\CompatInfo\Application\Sniffs\SniffInterface;
@@ -73,7 +73,7 @@ return static function (ContainerConfigurator $containerConfigurator): void
         ;
     }
 
-    $services->set(CollectorInterface::class, Profiler::class)
+    $services->set(ProfilerInterface::class, Profiler::class)
         ->arg('$token', Uuid::uuid4()->toString())
         // for unit tests
         ->public()

@@ -18,7 +18,7 @@ final class VersionResolverVisitor extends NodeVisitorAbstract
     /** @var string */
     private $attributeNamespacedName;
 
-    /** @var ReferenceCollectionInterface */
+    /** @var ReferenceCollectionInterface<string, array> */
     private $references;
 
     use VersionUpdater;
@@ -31,8 +31,8 @@ final class VersionResolverVisitor extends NodeVisitorAbstract
      *    on each namespaces, classes, interfaces, traits, methods, functions, closures or arrow functions
      *    to store the minimum version required.
      *
-     * @param ReferenceCollectionInterface $referenceCollection
-     * @param array $options
+     * @param ReferenceCollectionInterface<string, array> $referenceCollection
+     * @param array<string, string> $options
      */
     public function __construct(ReferenceCollectionInterface $referenceCollection, array $options = [])
     {
@@ -109,8 +109,8 @@ final class VersionResolverVisitor extends NodeVisitorAbstract
      * Handles all arguments of function like.
      *
      * @param Node\FunctionLike $node
-     * @param array $currentVersions
-     * @return array
+     * @param array<string, string> $currentVersions
+     * @return array<string, string>
      */
     private function handleParameters(Node\FunctionLike $node, array $currentVersions): array
     {
@@ -147,7 +147,7 @@ final class VersionResolverVisitor extends NodeVisitorAbstract
      *
      * @param Node\Name $name
      * @param string $group
-     * @return array
+     * @return array<string, string>
      */
     private function resolveClassVersions(Node\Name $name, string $group): array
     {

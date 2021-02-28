@@ -11,9 +11,10 @@ use Bartlett\CompatInfo\Application\Event\SuccessEvent;
 use Bartlett\CompatInfo\Application\PhpParser\NodeVisitor\NameResolverVisitor;
 use Bartlett\CompatInfo\Application\PhpParser\NodeVisitor\ParentContextVisitor;
 use Bartlett\CompatInfo\Application\PhpParser\NodeVisitor\VersionResolverVisitor;
-
 use Bartlett\CompatInfo\Application\Profiler\Profile;
+
 use PhpParser\Error;
+use PhpParser\Lexer;
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
@@ -23,6 +24,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
+use Exception;
 use function file_get_contents;
 
 /**
@@ -30,16 +32,33 @@ use function file_get_contents;
  */
 class Parser
 {
+    /** @var InputInterface  */
     private $input;
+    /** @var EventDispatcherInterface  */
     private $dispatcher;
+    /** @var SniffAnalyserInterface  */
     private $analyser;
+    /** @var ReferenceCollectionInterface<string, array>  */
     private $references;
+    /** @var ErrorHandler */
     private $errorHandler;
+    /** @var \PhpParser\Parser */
     private $parser;
+    /** @var Lexer */
     private $lexer;
+    /** @var NodeTraverser */
     private $traverser;
+    /** @var int */
     private $filesProceeded;
 
+    /**
+     * Parser constructor.
+     *
+     * @param InputInterface $input
+     * @param EventDispatcherInterface $compatibilityEventDispatcher
+     * @param SniffAnalyserInterface $compatibilityAnalyser
+     * @param ReferenceCollectionInterface<string, array> $referenceCollection
+     */
     public function __construct(
         InputInterface $input,
         EventDispatcherInterface $compatibilityEventDispatcher,
@@ -60,6 +79,7 @@ class Parser
      * @param ErrorHandler $errorHandler
      *
      * @return Profile
+     * @throws Exception
      */
     public function parse(string $source, Finder $finder, ErrorHandler $errorHandler): Profile
     {
@@ -113,7 +133,7 @@ class Parser
      *
      * @param SplFileInfo $fileInfo
      */
-    public function processFile(SplFileInfo $fileInfo)
+    public function processFile(SplFileInfo $fileInfo): void
     {
         $this->dispatcher->dispatch(new ProgressEvent($this, ['file' => $fileInfo->getRelativePathname()]));
 

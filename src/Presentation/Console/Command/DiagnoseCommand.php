@@ -19,6 +19,7 @@ final class DiagnoseCommand extends AbstractCommand implements CommandInterface
 {
     public const NAME = 'diagnose';
 
+    /** @var EntityManagerInterface */
     private $entityManager;
 
     public function __construct(QueryBusInterface $queryBus, EntityManagerInterface $entityManager)
@@ -27,7 +28,7 @@ final class DiagnoseCommand extends AbstractCommand implements CommandInterface
         $this->entityManager = $entityManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName(self::NAME)

@@ -42,6 +42,7 @@ use function substr_count;
 class Application extends SymfonyApplication implements ApplicationInterface
 {
     /**
+     * @var string
      * @link http://patorjk.com/software/taag/#p=display&f=Standard&t=phpCompatInfo
      */
     protected static $logo = "        _            ____                            _   ___        __
@@ -82,6 +83,7 @@ class Application extends SymfonyApplication implements ApplicationInterface
 
     /**
      * {@inheritDoc}
+     * @return void
      */
     public function setContainer(ContainerInterface $container = null)
     {

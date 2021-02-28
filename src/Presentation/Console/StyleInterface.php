@@ -3,6 +3,7 @@
 namespace Bartlett\CompatInfo\Presentation\Console;
 
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\StyleInterface as SymfonyStyleInterface;
 
@@ -22,4 +23,11 @@ interface StyleInterface extends SymfonyStyleInterface, OutputInterface
      * @return ProgressBar
      */
     public function createProgressBar(int $max = 0);
+
+    /**
+     * @param array<string> $headers
+     * @param array<string>|array<TableSeparator> $rows
+     * @param string $style default to 'compact' rather than 'symfony-style-guide'
+     */
+    public function table(array $headers, array $rows, string $style = 'compact'): void;
 }

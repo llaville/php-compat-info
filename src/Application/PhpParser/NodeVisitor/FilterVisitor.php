@@ -3,7 +3,6 @@
 namespace Bartlett\CompatInfo\Application\PhpParser\NodeVisitor;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor\FindingVisitor;
@@ -20,9 +19,15 @@ class FilterVisitor extends FindingVisitor implements NodeVisitor
     /** @var NormalizerInterface */
     protected $normalizer;
 
-    /** @var array */
+    /** @var array<string, string> */
     protected $context;
 
+    /**
+     * FilterVisitor constructor.
+     *
+     * @param NormalizerInterface $normalizer
+     * @param array<string, string> $context
+     */
     public function __construct(NormalizerInterface $normalizer, array $context = [])
     {
         $this->normalizer = $normalizer;
@@ -42,9 +47,9 @@ class FilterVisitor extends FindingVisitor implements NodeVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * @return ArrayCollection<int, mixed>
      */
-    public function getCollection(): Collection
+    public function getCollection(): ArrayCollection
     {
         $collection = new ArrayCollection($this->getFoundNodes());
 

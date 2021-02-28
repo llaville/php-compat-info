@@ -40,6 +40,7 @@ final class ProgressEventSubscriber implements EventSubscriberInterface
 
     /**
      * {@inheritDoc}
+     * @return array<string, string>
      */
     public static function getSubscribedEvents()
     {
@@ -49,7 +50,7 @@ final class ProgressEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param ProgressEvent $event
+     * @param ProgressEvent<string, string> $event
      * @return void
      */
     public function onProgress(ProgressEvent $event): void

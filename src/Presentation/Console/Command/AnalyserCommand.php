@@ -41,9 +41,10 @@ final class AnalyserCommand extends AbstractCommand implements CommandInterface
 {
     public const NAME = 'analyser:run';
 
+    /** @var array<string, array> */
     private $metrics;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName(self::NAME)
             ->setDescription('Analyse a data source to find out requirements')
@@ -85,6 +86,10 @@ final class AnalyserCommand extends AbstractCommand implements CommandInterface
         return self::SUCCESS;
     }
 
+    /**
+     * @param StyleInterface $output
+     * @param array<string, array> $response
+     */
     private function printReport(StyleInterface $output, array $response): void
     {
         if (empty($response)) {
@@ -284,7 +289,11 @@ final class AnalyserCommand extends AbstractCommand implements CommandInterface
         $io->table($headers, $rows);
     }
 
-    private function ext($domain): string
+    /**
+     * @param array<string> $domain
+     * @return string
+     */
+    private function ext(array $domain): string
     {
         return empty($domain['ext.max'])
             ? $domain['ext.min']
@@ -292,7 +301,11 @@ final class AnalyserCommand extends AbstractCommand implements CommandInterface
             ;
     }
 
-    private function php($domain): string
+    /**
+     * @param array<string> $domain
+     * @return string
+     */
+    private function php(array $domain): string
     {
         return empty($domain['php.max'])
             ? $domain['php.min']
