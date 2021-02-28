@@ -69,7 +69,7 @@ jobs:
 
             -
                 name: Static Analysis
-                run: phpstan analyse
+                run: phpstan analyse --ansi
 
             -
                 name: Unit tests
