@@ -73,4 +73,4 @@ jobs:
 
             -
                 name: Unit tests
-                run: vendor/bin/simple-phpunit
+                run: vendor/bin/simple-phpunit --group features,large,reference,regression,default
